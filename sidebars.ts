@@ -3,15 +3,23 @@ module.exports = {
         'intro',
         {
             type: 'category',
-            label: 'Advanced Programming Languages',
+            label: 'CPP',
             items: [
+                'cpp/preambule',
+                'cpp/concepts-avances-poo',
+                'cpp/design-patterns'
+            ]
+        },
+        {
+            type: 'category',
+            label: 'CSS',
+            items: [
+                'css/preambule',
                 {
                     type: 'category',
-                    label: 'CPP',
+                    label: '1. Mise en page',
                     items: [
-                        'advanced-programming-languages/cpp/preambule',
-                        'advanced-programming-languages/cpp/concepts-avances-poo',
-                        'advanced-programming-languages/cpp/design-patterns'
+                        'css/layout/flexbox'
                     ]
                 },
             ]

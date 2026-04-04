@@ -31,10 +31,10 @@ body {
     --ifm-color-primary-lighter: #d0e2ff;
     --ifm-color-primary-lightest: #edf5ff;
 
-    --ifm-color-info: #fafafa;
-    --ifm-color-success: #fafafa;
-    --ifm-color-warning: #fafafa;
-    --ifm-color-danger: #fafafa;
+    --ifm-color-info: #ffffff;
+    --ifm-color-success: #ffffff;
+    --ifm-color-warning: #ffffff;
+    --ifm-color-danger: #ffffff;
 
     --ifm-color-info-contrast-foreground: var(--ifm-color-content);
     --ifm-color-success-contrast-foreground: var(--ifm-color-content);
