@@ -141,7 +141,7 @@ int main() {
 
 Dans la classe `Document` ci-dessus, l’attribut `_themeColor` est `private` : il est inaccessible depuis l’extérieur. Le seul moyen de le lire ou de le modifier passe par `getThemeColor()` et `updateThemeColor(...)`.
 
-Ce n’est pas une formalité. Prenons un document qui possède également une taille de police. Cette taille doit évidemment rester strictement positive : c’est ce qu’on appelle un **invariant** de la classe. Déclarée `public`, elle peut être modifiée par n’importe quel code, sans aucun contrôle :
+Ce n’est pas une formalité. Un document peut également posséder une taille de police. Cette taille doit évidemment rester strictement positive : c’est ce qu’on appelle un **invariant** de la classe. Déclarée `public`, elle peut être modifiée par n’importe quel code, sans aucun contrôle :
 
 ```cpp
 // Sans encapsulation : l’état de l’objet est à la merci de l’extérieur

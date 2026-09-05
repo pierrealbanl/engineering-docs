@@ -41,7 +41,7 @@ interface ProgressStyle extends CSSProperties {
 
 ## 5. CSS
 
-* **Design tokens first.** Colors, spacing, radii, typography, and animation timings are CSS variables in `:root`. A raw value appearing in two files becomes a token (see `naming-conventions.md`).
+* **Design tokens first.** Colors, spacing, radii, typography, and animation timings are CSS variables in `:root`. A raw value appearing in two files becomes a token (see `docs/NAMING-CONVENTIONS.md`).
 * **One unique BEM block per component.** Two components must never share a block name, even across pages. All CSS is bundled globally, so `.card` defined twice is a silent collision. Prefix when in doubt (`product-card`, `profile-card`).
 * **Animations are utilities, not copies.** When several components share an animation, it lives once as a utility class or shared keyframes that components parameterize; never duplicate keyframes or opacity/transform boilerplate.
 * **Custom properties as a styling API.** Parents tune a child's behavior by setting a custom property (e.g. a `--delay` or `--progress` value), not by overriding its declarations.

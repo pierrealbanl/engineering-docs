@@ -64,10 +64,13 @@ const markdownComponents: Components = {
   li: ({ children }) => <li>{withLineBreaks(children)}</li>,
   th: ({ children, style }) => <th style={style}>{withLineBreaks(children)}</th>,
   td: ({ children, style }) => <td style={style}>{withLineBreaks(children)}</td>,
-  pre: ({ children }) => <>{children}</>,
-  code: ({ children, className, node }) => {
-    const languageName = className?.replace('language-', '') ?? ''
-    const code = String(children).replace(/\n$/, '')
+  pre: ({ children, node }) => {
+    const codeNode = node?.children[0]
+    if (codeNode?.type !== 'element' || codeNode.tagName !== 'code') return <pre>{children}</pre>
+    const classNames = codeNode.properties.className
+    const languageClass = Array.isArray(classNames) ? classNames.find((value) => String(value).startsWith('language-')) : undefined
+    const languageName = String(languageClass ?? '').replace('language-', '')
+    const code = flattenText(children).replace(/\n$/, '')
 
     if (languageName === 'mermaid') {
       return (
@@ -76,8 +79,7 @@ const markdownComponents: Components = {
         </Suspense>
       )
     }
-    if (!className) return <code>{children}</code>
-    return <CodeBlock code={code} languageName={languageName} title={readFenceTitle(node?.data?.meta)} />
+    return <CodeBlock code={code} languageName={languageName} title={readFenceTitle(codeNode.data?.meta)} />
   },
 }
 

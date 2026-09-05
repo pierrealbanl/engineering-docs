@@ -5,7 +5,7 @@ Defines how folders, files, CSS variables and TypeScript symbols are named. Read
 ## 1. Folders
 
 * **PascalCase** for component folders: `Button/`, `Modal/`, `UserCard/`
-* **kebab-case** for utility or styling folders: `shared/`, `styles/`
+* **kebab-case** for page and utility folders: `clients/`, `shared/`, `styles/`
 * **camelCase** for data or configuration folders: `data/`, `utils/`
 * A component **without subcomponents** lives directly at the root of the `components/` folder: `components/Button.tsx`
 * A component **with subcomponents** lives inside a folder with the same name: `components/Modal/Modal.tsx` + `components/Modal/components/`
@@ -13,23 +13,28 @@ Defines how folders, files, CSS variables and TypeScript symbols are named. Read
 
 ```text
 src/
-├── components/          # Reusable global components
-│   ├── Button.tsx       # Simple component, no subcomponents
-│   └── Modal/           # Component with subcomponents
-│       ├── Modal.tsx
-│       ├── Modal.css
-│       └── components/
-│           └── ModalHeader.tsx
-├── pages/               # One page = one kebab-case folder
-│   ├── components/      # Components shared between several pages
-│   └── dashboard/
-│       ├── DashboardPage.tsx
-│       ├── DashboardPage.css
-│       └── components/
-│           ├── Overview/
-│           └── shared/  # Components shared between the page's views
-│               └── styles/  # Pure utility CSS (not tied to a component)
-└── data/                # Mock data, types, utility functions
+├── main.tsx
+└── app/
+    ├── App.tsx
+    ├── hooks/               # Hooks reusable across the application
+    ├── styles/              # Stylesheets tied to no single component
+    ├── data/                # Mock data, types, utility functions
+    ├── components/          # Reusable global components
+    │   ├── Button.tsx       # Simple component, no subcomponents
+    │   └── Modal/           # Component with subcomponents
+    │       ├── Modal.tsx
+    │       ├── Modal.css
+    │       └── components/
+    │           └── ModalHeader.tsx
+    └── pages/               # One page = one kebab-case folder
+        ├── components/      # Components shared between several pages
+        └── dashboard/
+            ├── DashboardPage.tsx
+            ├── DashboardPage.css
+            └── components/
+                ├── Overview/
+                └── shared/  # Components shared between the page's views
+                    └── styles/  # Pure utility CSS (not tied to a component)
 ```
 
 ## 2. Files

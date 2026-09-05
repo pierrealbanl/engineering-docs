@@ -10,7 +10,7 @@ Defines how design tokens are organized and named. Read it before adding a value
 - `--spacing-*` (consumed by `padding`, `margin`, and `gap` alike; it's a general-purpose space scale, not gap-specific)
 - `--border-radius-sm` / `--border-radius-md`
 
-**Specific-purpose tokens** describe one exact role. Per `naming-conventions.md` they still lead with the property, and the element they serve becomes the category (`--spacing-section`, `--padding-card`, `--height-navbar`, and so on). Collapsing them into a generic scale would remove information for no benefit. Each one has a single job, and a future reader should be able to tell what it's for from its name alone.
+**Specific-purpose tokens** describe one exact role. Per `docs/NAMING-CONVENTIONS.md` they still lead with the property, and the element they serve becomes the category (`--spacing-section`, `--padding-card`, `--height-navbar`, and so on). Collapsing them into a generic scale would remove information for no benefit. Each one has a single job, and a future reader should be able to tell what it's for from its name alone.
 
 Rule of thumb: if a value is genuinely interchangeable between many unrelated components, its category is a scale step (`--spacing-lg`). If it has one specific structural job, its category is the element it belongs to (`--spacing-section`).
 
@@ -95,6 +95,6 @@ These variables are part of the component's contract: they follow the same `--[p
 
 ## 7. Adding a new token
 
-Per `naming-conventions.md`: a value used in more than one CSS file becomes a variable in the root stylesheet. A value used in exactly one file can stay local to that component's stylesheet. Before adding a new root token, check whether it truly belongs to an existing generic scale (extend that scale) or is genuinely single-purpose (name it after its job, following the word-choice guidance above).
+Per `docs/NAMING-CONVENTIONS.md`: a value used in more than one CSS file becomes a variable in the root stylesheet. A value used in exactly one file can stay local to that component's stylesheet. Before adding a new root token, check whether it truly belongs to an existing generic scale (extend that scale) or is genuinely single-purpose (name it after its job, following the word-choice guidance above).
 
 Raw colors are the exception that admits no local escape hatch: every color comes from the palette in `:root`. A one-off hex buried in a component stylesheet is how a palette stops being one.

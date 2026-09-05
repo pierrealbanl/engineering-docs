@@ -10,7 +10,7 @@ sidebar_position: 3
 
 ## 3.1. Le Factory Pattern
 
-Le **Factory Pattern** est un design pattern dont l’objectif est de créer des objets sans exposer leur logique de création au reste du programme. Plutôt que d’instancier directement des objets avec new, on confie cette responsabilité à une factory. Nous allons l’illustrer à travers un exemple concret.
+Le **Factory Pattern** est un design pattern dont l’objectif est de créer des objets sans exposer leur logique de création au reste du programme. Plutôt que d’instancier directement des objets avec new, on confie cette responsabilité à une factory. L’exemple suivant illustre ce fonctionnement.
 
 ```cpp title="DocumentFactory.hpp"
 #ifndef DOCUMENT_FACTORY_HPP

@@ -104,7 +104,7 @@ Ici, le mock remplace temporairement le vrai moteur.
 
 En résumé, dans le premier exemple, `Car` décide elle-même de créer son `Engine` avec `new DieselEngine()`. Dans le deuxième, `Car` reçoit son `Engine` depuis l’extérieur : c’est le principe de l’injection de dépendances.
 
-Il existe différents types d’injection de dépendances ; examinons-en deux ici :
+Il existe différents types d’injection de dépendances ; deux sont présentés ici :
 
 - Injection par constructeur (Constructor injection) : les dépendances sont transmises au constructeur de la classe cliente. Un exemple d’injection par constructeur a déjà été montré dans le code précédent de la classe `Car`. L’injection par constructeur est recommandée pour les dépendances obligatoires. Toutes les dépendances sont fournies via le constructeur de la classe, et un objet ne peut pas être créé sans ses dépendances requises.
 - Injection par setter (Setter injection) : les dépendances sont fournies à travers des méthodes setter. Le code suivant montre un exemple :
@@ -123,7 +123,7 @@ Ici, la dépendance est désormais transmise au setter en tant qu’argument. L�
 
 ## 1.4. Avantages de l’injection de dépendances
 
-L’injection de dépendances réduit les dépendances directes dans votre code et rend celui-ci plus réutilisable. Elle améliore également la testabilité de votre code. Nous avons maintenant appris les bases de l’injection de dépendances. Ensuite, nous allons voir comment l’injection de dépendances est utilisée dans Spring Boot.
+L’injection de dépendances réduit les dépendances directes dans le code, le rend plus réutilisable et améliore sa testabilité. Les bases de l’injection de dépendances étant désormais présentées, la suite explique son utilisation dans Spring Boot.
 
 ## 1.5. Utilisation de l’injection de dépendances dans Spring Boot
 
@@ -131,13 +131,13 @@ Dans le framework Spring, l’injection de dépendances est réalisée grâce au
 
 L’`ApplicationContext` est responsable de la création et de la gestion des objets, appelés **beans**, ainsi que de leurs dépendances.
 
-Spring Boot analyse les classes de votre application et enregistre comme beans Spring les classes qui utilisent certaines annotations (`@Service`, `@Repository`, `@Controller`, etc.). Ces beans peuvent ensuite être injectés à l’aide de l’injection de dépendances.
+Spring Boot analyse les classes de l’application et enregistre comme beans Spring celles qui utilisent certaines annotations (`@Service`, `@Repository`, `@Controller`, etc.). Ces beans peuvent ensuite être injectés à l’aide de l’injection de dépendances.
 
 ### 1.5.1. Injection par constructeur
 
 Les dépendances sont injectées via un constructeur. C’est la méthode la plus recommandée, car elle garantit que toutes les dépendances nécessaires sont disponibles lors de la création de l’objet.
 
-Une situation assez courante est celle où nous avons besoin d’accéder à une base de données pour effectuer certaines opérations. Dans Spring Boot, nous utilisons pour cela des classes de type repository. Dans cette situation, nous pouvons injecter notre classe repository à l’aide de l’injection par constructeur, puis commencer à utiliser ses méthodes, comme dans l’exemple ci-dessous :
+L’accès à une base de données pour effectuer certaines opérations est un besoin courant. Dans Spring Boot, des classes de type repository remplissent ce rôle. Une classe repository peut être injectée à l’aide de l’injection par constructeur, puis ses méthodes peuvent être utilisées comme dans l’exemple ci-dessous :
 
 ```java
 // Injection par constructeur
@@ -160,7 +160,7 @@ public class CarService {
 `@Service` n'est pas nécessaire à la compréhension de l'injection par constructeur.
 :::
 
-Avec un seul constructeur, ce qui est le cas courant, l’annotation `@Autowired` est inutile : depuis Spring 4.3, Spring utilise automatiquement l’unique constructeur disponible. En revanche, si votre classe possède plusieurs constructeurs, vous devez utiliser cette annotation afin de définir lequel doit être utilisé pour l’injection de dépendances :
+Avec un seul constructeur, ce qui est le cas courant, l’annotation `@Autowired` est inutile : depuis Spring 4.3, Spring utilise automatiquement l’unique constructeur disponible. En revanche, si une classe possède plusieurs constructeurs, cette annotation permet de définir celui à utiliser pour l’injection de dépendances :
 
 ```java
 // Constructeur à utiliser pour l'injection de dépendances
