@@ -25,20 +25,20 @@ $ npm run dev
 
 ## Create or Rename a Category
 
-A category corresponds to a directory inside `src/docs`. For example, the **Full Stack Development** category is created by the following directory:
+A category corresponds to a directory inside `src/app/docs`. For example, the **Full Stack Development** category is created by the following directory:
 
 ```text
-src/docs/full-stack-development/
+src/app/docs/full-stack-development/
 ```
 
 Every Markdown file added to this directory automatically appears in that category:
 
 ```text
-src/docs/
+src/app/docs/
 └── full-stack-development/
     ├── preambule.md
-    ├── spring-boot.md
-    └── react.md
+    ├── injection-dependances.md
+    └── creer-et-acceder-base-de-donnees-avec-jpa.md
 ```
 
 By default, the directory name is converted into a title: hyphens become spaces and each word is capitalized. Therefore, `full-stack-development` becomes **Full Stack Development**.
@@ -55,12 +55,12 @@ To define the category label and position explicitly, create a `_category.json` 
 This configuration does not require any TypeScript changes. Nested categories work the same way:
 
 ```text
-src/docs/
+src/app/docs/
 └── full-stack-development/
     ├── _category.json
-    └── react/
+    └── jpa/
         ├── _category.json
-        └── hooks.md
+        └── creer-et-acceder-base-de-donnees-avec-jpa.md
 ```
 
 Categories and nested categories are sorted by their `position` property, then alphabetically when that property is omitted.
