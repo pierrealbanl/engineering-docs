@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { uiContent } from '../../../data/uiContent'
 import type { DocumentHeading } from '../../../utils/markdown'
+import InlineMarkdown from '../../../components/InlineMarkdown'
 import './TableOfContents.css'
 
 interface TableOfContentsProps {
@@ -46,7 +47,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
             onClick={() => navigateToHeading(heading.id)}
             aria-current={currentHeadingId === heading.id ? 'location' : undefined}
           >
-            {heading.label}
+            <InlineMarkdown>{heading.label}</InlineMarkdown>
           </button>
         ))}
       </nav>

@@ -44,7 +44,7 @@ export function createTextId(value: string): string {
 function toHeading(line: string): DocumentHeading | undefined {
   const [, levelMarker, label] = line.match(headingPattern) ?? []
   if (!levelMarker || !label) return undefined
-  return { id: createHeadingId(label), level: levelMarker.length, label: label.replace(markdownEmphasisPattern, '') }
+  return { id: createHeadingId(label), level: levelMarker.length, label }
 }
 
 export function extractHeadings(source: string): readonly DocumentHeading[] {

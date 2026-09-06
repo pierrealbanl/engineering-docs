@@ -1,0 +1,9 @@
+.inline-markdown code {
+  border: var(--border-width-hairline) solid var(--color-border-subtle);
+  padding: 0.125em 0.25em;
+  background: var(--color-surface-subtle);
+  font-family: var(--font-family-mono);
+  text-transform: none;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}

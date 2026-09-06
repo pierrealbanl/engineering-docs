@@ -225,3 +225,222 @@ Dans la fenêtre de connexion, renseigner les paramètres suivants :
 - Password : laisser le champ vide
 
 Cliquer ensuite sur le bouton `Connect` afin d’accéder à la console H2.
+
+## 2.3. Création de dépôts CRUD
+
+Une classe de dépôt peut être créée afin de fournir les opérations CRUD. Spring Data JPA met à disposition l’interface `CrudRepository`, qui prend en charge les opérations **Create, Read, Update et Delete**. Cette interface fournit ainsi les principales fonctionnalités CRUD nécessaires à la gestion d’une classe d’entité.
+
+Une nouvelle interface nommée `CarRepository` doit être créée dans le package `com.example.demo.domain`, avec le contenu suivant :
+
+```java
+package com.example.demo.domain;
+
+import org.springframework.data.repository.CrudRepository;
+
+public interface CarRepository extends CrudRepository<Car, Long> {}
+```
+
+L’interface `CarRepository` hérite ainsi l’interface `CrudRepository` de Spring Data JPA.
+
+Les arguments de type `<Car, Long>` indiquent :
+
+- que le dépôt est associé à la classe d’entité `Car` ;
+- que le type de l’identifiant de cette entité est `Long`.
+
+L’interface `CrudRepository` fournit plusieurs méthodes permettant d’effectuer les opérations CRUD. Les méthodes les plus couramment utilisées sont présentées dans le tableau suivant :
+
+| Méthode                                     | Description                                    |
+| ------------------------------------------- | ---------------------------------------------- |
+| `long count()`                              | Renvoie le nombre d’entités                    |
+| `Iterable<T> findAll()`                     | Renvoie tous les éléments d’un type donné      |
+| `Optional<T> findById(ID id)`               | Renvoie un élément à partir de son identifiant |
+| `void delete(T entity)`                     | Supprime une entité                            |
+| `void deleteAll()`                          | Supprime toutes les entités du dépôt           |
+| `<S extends T> S save(S entity)`            | Enregistre une entité                          |
+| `Iterable<S> saveAll(Iterable<S> entities)` | Enregistre plusieurs entités                   |
+
+Lorsqu’une méthode est susceptible de ne renvoyer qu’un seul élément, comme `findById()`, le résultat est encapsulé dans un objet `Optional<T>` plutôt que retourné directement sous la forme `T`. La classe `Optional`, introduite avec Java 8, représente un conteneur pouvant contenir une valeur ou être vide. La méthode `isPresent()` permet de vérifier la présence d’une valeur. Lorsqu’une valeur est présente, elle peut notamment être récupérée à l’aide de la méthode `get()`. L’utilisation de `Optional` permet de représenter explicitement l’absence éventuelle d’une valeur et contribue à limiter les erreurs liées aux références nulles, notamment les exceptions `NullPointerException`.
+
+Il est maintenant possible d’ajouter quelques données de démonstration à la base de données H2. Pour cela, l’interface `CommandLineRunner` de Spring Boot peut être utilisée.
+
+### 2.3.1. Ajout de données de démonstration avec `CommandLineRunner`
+
+L’interface `CommandLineRunner` permet d’exécuter du code supplémentaire juste après le démarrage complet de l’application. La classe principale de l’application Spring Boot implémente cette interface. Il est donc nécessaire d’implémenter la méthode `run`, comme dans le fichier `DemoApplication.java` suivant :
+
+```java
+package com.example.demo;
+
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.CommandLineRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication implements CommandLineRunner {
+
+    private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+
+    public static void main(String[] args) {
+       SpringApplication.run(DemoApplication.class, args);
+       logger.info("Application started");
+    }
+
+    @Override
+    public void run(String @NonNull ... args) throws Exception {
+       // Code exécuté automatiquement après le démarrage de l'application
+    }
+}
+```
+
+Une variable `carRepository` de type `CarRepository` est ensuite déclarée :
+
+```java
+private final CarRepository carRepository;
+
+public DemoApplication(CarRepository carRepository) {
+    this.carRepository = carRepository;
+}
+```
+
+Spring fournit automatiquement une instance de `CarRepository` au constructeur. Ce mécanisme est appelé **injection de dépendances par constructeur**.
+
+Une fois le dépôt injecté, les méthodes CRUD peuvent être utilisées dans la méthode `run()`. Le code suivant ajoute trois voitures à la base de données à l’aide de la méthode `save()` :
+
+```java
+package com.example.demo;
+
+import com.example.demo.domain.Car;
+import com.example.demo.domain.CarRepository;
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.CommandLineRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication implements CommandLineRunner {
+
+    private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+
+    private final CarRepository carRepository;
+
+    public DemoApplication(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+        logger.info("Application started");
+    }
+
+    @Override
+    public void run(String @NonNull ... args) throws Exception {
+        carRepository.save(new Car("Ford", "Mustang", "Red", "ADF-1121", 2023, 59000));
+        carRepository.save(new Car("Nissan", "Leaf", "White", "SSJ-3002", 2020, 29000));
+        carRepository.save(new Car("Toyota", "Prius", "Silver", "KKO-0212", 2020, 29000));
+
+        // Récupère toutes les voitures et les affiche dans la console
+        for (Car car : carRepository.findAll())
+            logger.info("brand: {}, model: {}", car.getBrand(), car.getModel());
+    }
+}
+```
+
+Lors du démarrage de l’application, la méthode `run()` est exécutée automatiquement. Les trois voitures sont alors enregistrées dans la base de données H2. La méthode `findAll()` permet ensuite de récupérer l’ensemble des voitures enregistrées et d’afficher leur marque et leur modèle dans la console.
+
+### 2.3.2. Création de requêtes à partir du nom des méthodes
+
+Spring Data permet de définir des requêtes directement dans les repositories. Le nom d’une méthode de requête commence par un préfixe, par exemple `findBy`.
+
+Après ce préfixe, les champs de la classe d’entité utilisés comme critères de recherche sont indiqués. Plusieurs champs peuvent être placés après le mot-clé `By` et combinés à l’aide des mots-clés `And` et `Or`.
+
+```java
+package com.example.demo.domain;
+
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface CarRepository extends CrudRepository<Car, Long> {
+    // Recherche les voitures par marque
+    List<Car> findByBrand(String brand);
+
+    // Recherche les voitures par couleur
+    List<Car> findByColor(String color);
+
+    // Recherche les voitures par année du modèle
+    List<Car> findByModelYear(int model);
+
+    // Recherche les voitures par marque ET modèle
+    List<Car> findByBrandAndModel(String brand, String model);
+
+    // Recherche les voitures par marque OU couleur
+    List<Car> findByBrandOrColor(String brand, String color);
+}
+```
+
+### 2.3.3. Tri des résultats avec `OrderBy`
+
+Les requêtes peuvent être triées à l’aide du mot-clé `OrderBy` dans le nom de la méthode de requête :
+
+```java
+package com.example.demo.domain;
+
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface CarRepository extends CrudRepository<Car, Long> {
+    // Récupère les voitures par marque et les trie par année
+    List<Car> findByBrandOrderByModelYearAsc(String brand);
+}
+```
+
+### 2.3.4. Création de requêtes personnalisées avec `@Query`
+
+Il est également possible de créer des requêtes personnalisées à l’aide de l’annotation `@Query`. L’exemple suivant illustre l’utilisation d’une requête avec `CrudRepository` :
+
+```java
+package com.example.demo.domain;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+
+public interface CarRepository extends CrudRepository<Car, Long> {
+
+    // Récupère les voitures selon leur marque
+    @Query("select c from Car c where c.brand like %?1")
+    List<Car> findByBrand(String brand);
+}
+```
+
+- `?1` correspond au premier paramètre de la méthode `findByBrand`.
+- `c` représente un alias attribué à l’entité `Car`, ce qui permet de référencer ses attributs dans la requête.
+
+### 2.3.5. Pagination et tri avec `PagingAndSortingRepository`
+
+Spring Data JPA fournit également `PagingAndSortingRepository`, une interface qui hérite `CrudRepository`. Elle permet de récupérer des entités en appliquant de la pagination et du tri. Cette fonctionnalité est particulièrement utile pour gérer de grandes quantités de données, puisqu’elle évite de charger l’intégralité des résultats en une seule fois. Les données peuvent également être triées selon un ou plusieurs critères. La création d’un `PagingAndSortingRepository` est similaire à celle d’un `CrudRepository` :
+
+```java
+package com.example.demo.domain;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface CarRepository extends PagingAndSortingRepository<Car, Long> {}
+```
+
+Dans ce cas, le repository met à disposition deux méthodes supplémentaires :
+
+| Méthode                              | Description                                                                     |
+| ------------------------------------ | ------------------------------------------------------------------------------- |
+| `Iterable<T> findAll(Sort sort)`     | Retourne l’ensemble des entités en appliquant les critères de tri définis.      |
+| `Page<T> findAll(Pageable pageable)` | Retourne une page d’entités en appliquant les paramètres de pagination définis. |
+
+:::info
+À noter qu'il existe `JpaRepository` qui regroupe les fonctionnalités de `CrudRepository` et de `PagingAndSortingRepository`, tout en ajoutant des fonctionnalités spécifiques à JPA : `import org.springframework.data.jpa.repository.JpaRepository;`
+:::

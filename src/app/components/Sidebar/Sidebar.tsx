@@ -2,6 +2,7 @@ import { ChevronDown, Close } from '@carbon/icons-react'
 import { useState, type CSSProperties } from 'react'
 import { navigationItems, type DocumentEntry, type DocumentGroup } from '../../data/documents'
 import { uiContent } from '../../data/uiContent'
+import InlineMarkdown from '../InlineMarkdown'
 import './Sidebar.css'
 
 interface SidebarProps {
@@ -30,7 +31,7 @@ export default function Sidebar({ activeDocumentId, isOpen, onClose, onNavigate 
       onClick={() => onNavigate(document.id)}
       aria-current={activeDocumentId === document.id ? 'page' : undefined}
     >
-      {document.shortTitle}
+      <InlineMarkdown>{document.shortTitle}</InlineMarkdown>
     </button>
   )
 
@@ -47,7 +48,7 @@ export default function Sidebar({ activeDocumentId, isOpen, onClose, onNavigate 
             aria-expanded={Boolean(expandedGroups[group.id])}
             aria-controls={controlId}
           >
-            <span>{group.title}</span>
+            <span><InlineMarkdown>{group.title}</InlineMarkdown></span>
             <ChevronDown className="sidebar__chevron" size={16} aria-hidden="true" />
           </button>
         </h2>
